@@ -1,40 +1,45 @@
-%% function to make all the subplots for figure 4 (Imaging data)
+%% function to make all the subplots for figure 5 and S5, h?C cells 
 function makefigure5(savefigs)
 
+%% define constants
 
-%plot A) is a diagram not included here
-%cd to the 2 photon imaging folder
-%% make subfigure B/C/D
 
-cd('lh1396');
-%somehow have to get it to save the ROI image
-alltrialstimecourse(pwd,' ',1,0,0,0);
-makeimagingplots(pwd,'lh1396new.mat',1,0,' ');
-cd('..');
-%% Make subfigure E/F/G
-cd('MB052B');
-alltrialstimecourse(pwd,' ',1,0,0,0);
-makeimagingplots(pwd,'MB052Bnew.mat',1,0,'');
-cd('..');
-%% Make subfigure H/I/J
-cd('65C03');
-alltrialstimecourse(pwd,' ',2,0,0,0);
-makeimagingplots(pwd,'65C03_analysis2.mat',1,0,' ');%have to turn off the plotting of someof these
-cd('..');
-%% Make subfigure K/L/M
-cd('13B10ADvt041421DB');
-alltrialstimecourse(pwd,' ',2,0,0,0);
-makeimagingplots(pwd,'vFSBN_analysis2.mat',1,0,' ');
-cd('..');
+actatlasloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/Fig4Timecourses.xlsx';
+trajectoryloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/exampletrajectories.xlsx';
+drivers={'19G02ADvt062617DB','vt024634ADvt062617DB'};
 
-%% Make subfigure N -> Q
+%% mean plots for individual vt062617 column examples
+%will have to hardcode the ROI# in 
+%choose column 7 
+alltrialstimecourse(pwd,'vt062617_021120_f3e4',2,0,1,0);
+ylim([0.9 1.25]);
+%ok what is a good second example - choose column 8
+alltrialstimecourse(pwd,'vt062617_031120_f6e6',2,0,1,0);
 
-%need to do some adjustments here so it saves both - and matches axes ->
-%maybe edit the mutli one to match. 
+%% Generate all columns by direction Figure 5F
 
-%% make subplot R
+%%  Generate all columns wind and odour timecourse Figure 5G
 
-%% make dynamic range plot(s)
+%% Generate column centered analysis Figure 5H
+
+% HA the terrible script 
+
+
+%% plot behavioural trajectories for splits in 5I
+trajectories(actatlasloc,trajectoryloc,' ');
+
+%% plot timecourses and paired plots Figure 5I, S5C
+
+matchedtimecourses(actatlasloc,drivers,'activation',' ');
+HdeltaCparameters=extract(actatlasloc,'resblankalwayson10s');
+[siglinesup,siglinesdown,magnitudes,pvals]=plotparameters_FSB(actatlasloc,HdeltaCparameters,{'upwind','curvature'},{'cFSB'},' ','region');
+%% plot calcium imaging example for supplement (Figure S5A)
+%supplemental choose biggest column
+alltrialstimecourse(pwd,'vt062617_021320_f1e1',2,0,1,0);
+
+%make paired for all columns wind vs odour 
+
+
 
 
 end
