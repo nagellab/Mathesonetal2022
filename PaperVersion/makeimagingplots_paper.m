@@ -1,14 +1,7 @@
 function makeimagingplots_paper(headpath,tuningfilename,savemode,examples,fileexpnum)
 
-%select a tuning file. Make the timecourses, tuning curves, and ROI
-%figures. Save them. Also select examples for particular experiments or
-%ROIs to look at averages
-
-%examples is a flag if you want to run it
-%fileexpnum is only relevant if you are. If you aren't doesn't matter -
-%just ignore
 close all; %make sure nothing else is open when you start 
-load(tuningfilename);
+load(tuningfilename);%load the genotype
 tuningname=strsplit(tuningfilename,'.');
 
 cd(headpath);
@@ -49,7 +42,7 @@ if examples
         cd('imagingfigures_extra')
         savefig(figure(1),['exampletimecourse_',tuningname{1}, fileexpnum]);
         print(figure(1),['exampletimecourse_',tuningname{1}, fileexpnum],'-dpdf','-painters');
-        %do I want the other ones
+        
     end
 end
 %close all;

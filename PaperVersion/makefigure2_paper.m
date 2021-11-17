@@ -52,16 +52,22 @@ load('./CleanBehaviourdata/extractedparameters/TNTparameters/TNTparameters.mat')
 
 %% Make imaging plots Fig 2E
 
-makeimagingplots(pwd,'lh1396all.mat',0,0,'');
-makeimagingplots(pwd,'MB052Bfullnew.mat',0,0,'');
+cd('./Imagingdata/');
+makeimagingplots_paper(pwd,'lh1396.mat',0,0,'');
+makeimagingplots_paper(pwd,'MB052B.mat',0,0,'');
 %change the window that is being used between these for plotting
-makeimagingplots(pwd,'reanalyze.mat',0,0,'');
-makeimagingplots(pwd,'MB077Breanalyze.mat',0,0,'');
+makeimagingplots_paper(pwd,'MB077B.mat',0,0,'');
+makeimagingplots_paper(pwd,'MB082C.mat',0,0,'');
+
 
 
 %% Calculate directional indices Fig 2F
 
-%directionalratio from current data - first calculate and then plot 
+ cd Imagingdata/
+ 
+ dirratioscript_paper
+ 
+ cd ..
 
 
 %% Make anenometer plot Fig S2D 
@@ -70,12 +76,16 @@ ManifoldStimulusScript
 
 %% example imaging plots (Fig S2E)
 
+%look at single fly heatmaps for selected examples 
 %make lh1396 single example 
- 
-alltrialstimecourse(pwd,'lh1396_012220_f1e2',2,0,1,0);
+load('lh1396.mat');
+alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'lh1396_012220_f1e2',0);
 
 %MB052B single example 
-alltrialstimecourse(pwd,'MB052B_apr2621_f1e1',2,0,1,0); % I think 
+load('MB052B.mat');
+alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'MB052B_011520_f1e2',0);
+
+cd('..')
 
 %MB077B single example
 alltrialstimecourse_newthor(pwd,'MB077B_jul2021_f4e5',2,0,1,0);
@@ -89,5 +99,4 @@ alltrialstimecourse_newthor(pwd,'MB082C_jul0721_f1e3',2,0,1,0);
 
 load('ephysdataMBON.mat');
 MBONplotting(physdata,filtdata,0);
-%need to save the data from this somewhere/how
-%reduce this to just plotting and doing the stats of this function
+

@@ -3,7 +3,7 @@ function makefigure1_paper(savefigs)
 %% Figure Constants 
 
 actatlasloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/refinedlines.xlsx';
-orcoacvatlasloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/Figure1Timecourses.xlsx';
+orcoacvatlasloc='./datalocs/orcoacv.xlsx';
 ctrlatlasloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/basics.xlsx';
 basicsatlasloc='./datalocs/Basics_paper.xlsx';
 ORatlasloc='./datalocs/singleORs_paper.xlsx';
@@ -50,20 +50,17 @@ load('./CleanBehaviourdata/extractedparameters/TNTparameters/TNTparameters.mat')
 
 clear parameters;
 
-%% S1A timecourse and paired data %fix this
-[indslight,indsodour]=matchedtimecourses2conds(orcoacvatlasloc,'orco5905acvChrimson','resblankalwayson10s','res10salwaysonblank',0);
-%make the baseline subtracted paired plots
-%figure; 
-plotpaired_orcoactivation(parametersodour.upwind.dorco5905acv(indsodour)-parametersodour.upwindbase.dorco5905acv(indsodour),parameterslight.upwind.dorco5905acv(indslight)-parameterslight.upwindbase.dorco5905acv(indslight),1,'upwind velocity (mm/s)')
-[h,p]=signrank(parametersodour.upwind.dorco5905acv(indsodour)-parametersodour.upwindbase.dorco5905acv(indsodour),parameterslight.upwind.dorco5905acv(indslight)-parameterslight.upwindbase.dorco5905acv(indslight));
-figure;
-plotpaired_orcoactivation(parametersodour.curvatureoff.dorco5905acv(indsodour)-parametersodour.curvaturebase.dorco5905acv(indsodour),parameterslight.curvatureoff.dorco5905acv(indslight)-parameterslight.curvaturebase.dorco5905acv(indslight),1,'curvature (deg/mm)')
+%% S1A timecourse and paired data
+matchedtimecourses2conds_paper(orcoacvatlasloc,'orco5905acvChrimson',0);%make the baseline subtracted paired plots
 
-[h,p]=signrank(parametersodour.upwind.dorco5905acv(indsodour)-parametersodour.upwindbase.dorco5905acv(indsodour),parameterslight.upwind.dorco5905acv(indslight)-parameterslight.upwindbase.dorco5905acv(indslight))
-[h,p]=signrank(parametersodour.curvatureoff.dorco5905acv(indsodour)-parametersodour.curvaturebase.dorco5905acv(indsodour),parameterslight.curvatureoff.dorco5905acv(indslight)-parameterslight.curvaturebase.dorco5905acv(indslight))
+load('./CleanBehaviourdata/extractedparameters/ORparameters/OrcoACVmatchedParameters.mat');
+plotpaired_orcoactivation(parameters.upwind.dACV-parameters.upwindbase.dACV,parameters.upwind.dorco-parameters.upwindbase.dorco,1,'upwind velocity (mm/s)');
+plotpaired_orcoactivation(parameters.curvatureoff.dACV-parameters.curvaturebase.dACV,parameters.curvatureoff.dorco-parameters.curvaturebase.dorco,1,'upwind velocity (mm/s)');
 
+[h,p]=signrank(parameters.upwind.dACV-parameters.upwindbase.dACV,parameters.upwind.dorco-parameters.upwindbase.dorco)
+[h,p]=signrank(parameters.curvatureoff.dACV-parameters.curvaturebase.dACV,parameters.curvatureoff.dorco-parameters.curvaturebase.dorco)
 
-clear indslight indsodour parameterslight parametersodour
+clear parameters
 %% Make subplot S1D) single OR data
 %load single OR data
 load('./CleanBehaviourdata/extractedparameters/ORparameters/ORparameters.mat');
