@@ -36,6 +36,7 @@ chosenIndex={};
 
 for k=1:numel(filelist)%for each of the extracted files load the data.
     load(filelist(k).name);
+    disp(filelist(k).name);
     fn=fieldnames(fluordata);%shouldn't matter which one I use since they're all the same size
     [numROIs,~]=size(fluordata.(fn{1}){1});
     

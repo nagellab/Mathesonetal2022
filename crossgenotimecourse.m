@@ -41,6 +41,8 @@ end
 allaxes={};
 alldat=[];
 counter=1;
+timing=[5,15,25,35];
+%timing=[10,20,30,40];
 for k=1:numel(fn)
     framerate=chosenFrameRate.(fn{k});
     figure(fig2);
@@ -52,7 +54,7 @@ for k=1:numel(fn)
         hold on;
         [~,triallength]=size(chosenfluor.(fn{k}).(directions{p}));
         tvec=linspace(1,triallength,triallength)/framerate;
-        plot(tvec(framerate*12.5:framerate*(12.5+len)),nanmean(chosenfluor.(fn{k}).(directions{p})(:,framerate*12.5:framerate*(12.5+len))),'Linewidth',1,'color',[0.5 0.5 0.5]);
+        plot(tvec(framerate*(timing(2)-2.5):framerate*(timing(2)-2.5+len)),nanmean(chosenfluor.(fn{k}).(directions{p})(:,framerate*(timing(2)-2.5):framerate*(timing(2)-2.5+len))),'Linewidth',1,'color',[0.5 0.5 0.5]);
         try
             currmean=nanmean(chosenfluor.(fn{k}).(directions{p})(:,1:framerate*40));
             resampall=resample(currmean,200,size(currmean,2));
@@ -66,12 +68,13 @@ end
 linkaxes([allaxes{1},allaxes{2},allaxes{3},allaxes{4},allaxes{5}]);
 figure(fig2);
 directionnames={'-90','-45','0','45','90'};
+
 for k=1:5
     subplot(1,5,k);
     yl=ylim;
-    patch([5 5 15 15],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
-    patch([15 15 25 25],[yl(1) yl(2) yl(2) yl(1)],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
-    patch([25 25 35 35],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
+    patch([timing(1) timing(1) timing(2) timing(2)],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
+    patch([timing(2) timing(2) timing(3) timing(3)],[yl(1) yl(2) yl(2) yl(1)],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
+    patch([timing(3) timing(3) timing(4) timing(4)],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
     title(directionnames{k});
     xlabel('t(s)');
     xlim([0 45]);
@@ -84,7 +87,7 @@ for k=1:5
     for p=1:numel(fn)%for each direction
         try
             framerate=chosenFrameRate.(fn{p});
-            flydat=chosenfluor.(fn{p}).(directions{k})(:,12.5*framerate:(12.5+len)*framerate);
+            flydat=chosenfluor.(fn{p}).(directions{k})(:,(timing(2)-2.5)*framerate:((timing(2)-2.5)+len)*framerate);
             flymean=nanmean(flydat);%resample this to 25 
             resampflymean=resample(flymean,5*len,size(flymean,2));
             dirmean=[dirmean;resampflymean];
@@ -95,20 +98,20 @@ for k=1:5
     end
     subplot(1,5,k)
     try
-    tvec=linspace(12.5,(12.5+len),5*len);
+    tvec=linspace(timing(2)-2.5,(timing(2)-2.5+len),5*len);
     plot(tvec,nanmean(dirmean),'Linewidth',2,'color','k');
     catch
         disp('jesus');
     end
-    xlim([12.5 (12.5+len)]);
+    xlim([timing(2)-2.5 (timing(2)+len-2.5)]);
 end
 
 tvec=linspace(0,40,200);
 figure; hold on; shadedErrorBar(tvec,nanmean(alldat),nanstd(alldat));
 
-patch([5 5 15 15],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
-patch([15 15 25 25],[yl(1) yl(2) yl(2) yl(1)],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
-patch([25 25 35 35],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
+patch([timing(1) timing(1) timing(2) timing(2)],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
+patch([timing(2) timing(2) timing(3) timing(3)],[yl(1) yl(2) yl(2) yl(1)],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
+patch([timing(3) timing(3) timing(4) timing(4)],[yl(1) yl(2) yl(2) yl(1)],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
 ylim([0.8 2]);
 %plot mean for each
 

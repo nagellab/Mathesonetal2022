@@ -1,12 +1,16 @@
 function [avgfluor,stdfluor]=averagedirections(fluordata)
 fn=fieldnames(fluordata);
 for k=1:5
+    try
     if isnan(fluordata.(fn{k}))
         avgfluor.(fn{k})=NaN;
         stdfluor.(fn{k})=NaN;
     else
         avgfluor.(fn{k})=nanmean(fluordata.(fn{k}));
         stdfluor.(fn{k})=nanstd(fluordata.(fn{k}));
+    end
+    catch
+        disp('help in averaged directions');
     end
 end
 end
