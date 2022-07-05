@@ -53,7 +53,8 @@ for k=1:size(oneall,1)
     temp3=threeall(k,:);
     temp4=fourall(k,:);
     temp5=fiveall(k,:);
-    %calculate baseline period excluding first few samples for shutter lab
+    %calculate baseline period excluding first few samples for shutter lag
+    %all have same sampling rate - hardcoded sample values (5fps)
     base1=mean(temp1(3:25));
     base2=mean(temp2(3:25));
     base3=mean(temp3(3:25));
@@ -93,7 +94,8 @@ for k=1:size(oneall,1)
     
     
     %Does the column show a response? 
-    factor=2;%how many standard devistions 
+  
+    factor=2;%how many standard deviations 
     if (mean1>(base1+factor*basestd1)||meanwind1>(base1+factor*basestd1)||meanwindoff1>(base1+factor*basestd1)||meanoff1>(base1+factor*basestd1))
         figure(fugh);%for all those above for first direction - plot
         subplot(1,5,1);
@@ -151,6 +153,7 @@ for k=1:size(oneall,1)
     
 end
 
+
 %for subplots
 %add stimulus window graphics and plot the mean for each direction 
 subplot(1,5,1);
@@ -184,11 +187,14 @@ patch([15 15 25 25],[0.8 1.5 1.5 0.8],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha
 patch([25 25 35 35],[0.8 1.5 1.5 0.8],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
 xlim([12.5 27.5]);
 
+figure; hold on;
+plot(tvec,fullgood,'color',[0.5 0.5 0.5]);
 plot(tvec,nanmean(fullgood),'k','linewidth',2);
 patch([5 5 15 15],[0.8 1.5 1.5 0.8],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
 patch([15 15 25 25],[0.8 1.5 1.5 0.8],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
 patch([25 25 35 35],[0.8 1.5 1.5 0.8],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
-xlim([2.5 27.5]);
+xlim([2.5 37.5]);
+title('all responsive columns');
 
 
 %Generate another figure plotting all responsive columns
@@ -198,7 +204,11 @@ patch([5 5 15 15],[0.95 1.2 1.2 0.95],[180/255 180/255 180/255],'FaceAlpha',0.2,
 patch([15 15 25 25],[0.95 1.2 1.2 0.95],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
 patch([25 25 35 35],[0.95 1.2 1.2 0.95],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
 ylim([0.95 1.2]);
-xlim([2.5 30]);
+xlim([2.5 45]);
+
+%generate a figure with all responsive column - individuals shown
+%figure; hold on;
+%plot(tvec, full)
 
 %Make a paired plot of column responses between wind and odour
 figure; hold on;
@@ -209,7 +219,28 @@ meanallcolodour=nanmean(allcolodour,2);
 
 plot([1*ones(size(meanallcolbase)),2*ones(size(meanallcolbase))]',[meanallcolbase,meanallcolodour]','color',[0.5 0.5 0.5]);
 plot([1,2],[nanmean(meanallcolbase),nanmean(meanallcolodour)],'k','linewidth',2);
-[h,p]=ttest(meanallcolbase,meanallcolodour)
+[h,p]=ttest(meanallcolbase,meanallcolodour);
+
+figure; hold on;
+allcolbase=fullgood(:,25:50);
+meanallcolbase=nanmean(allcolbase,2);
+allcolwindoff=fullgood(:,175:200);
+meanallcolwindoff=nanmean(allcolwindoff,2);
+plot([1*ones(size(meanallcolbase)),2*ones(size(meanallcolbase))]',[meanallcolbase,meanallcolwindoff]','color',[0.5 0.5 0.5]);
+plot([1,2],[nanmean(meanallcolbase),nanmean(meanallcolwindoff)],'k','linewidth',2);
+[h,p]=ttest(meanallcolbase,meanallcolwindoff);
+
+figure; hold on;
+allcolodouroff=fullgood(:,100:125);
+meanallcolodouroff=nanmean(allcolodouroff,2);
+plot([1*ones(size(meanallcolbase)),2*ones(size(meanallcolbase))]',[meanallcolbase,meanallcolodouroff]','color',[0.5 0.5 0.5]);
+plot([1,2],[nanmean(meanallcolbase),nanmean(meanallcolodouroff)],'k','linewidth',2);
+[h,p]=ttest(meanallcolbase,meanallcolwindoff);
+
+
+figure; hold on; 
+plot([1*ones(size(meanallcolbase)),2*ones(size(meanallcolbase))]',[meanallcolodour,meanallcolodouroff]','color',[0.5 0.5 0.5]);
+plot([1,2],[nanmean(meanallcolodour),nanmean(meanallcolodouroff)],'k','linewidth',2);
 
 
 
@@ -277,7 +308,10 @@ figure; hold on;
 
 plot(tvec,flymaxes,'color',[0.5 0.5 0.5]);
 plot(tvec,nanmean(flymaxes),'k','Linewidth',2);
-title('maximum columns')
+title('maximum columns');
+patch([5 5 15 15],[0.8 1.5 1.5 0.8],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
+patch([15 15 25 25],[0.8 1.5 1.5 0.8],[0 0.6 230/255],'FaceAlpha',0.1,'EdgeAlpha',0);
+patch([25 25 35 35],[0.8 1.5 1.5 0.8],[180/255 180/255 180/255],'FaceAlpha',0.2,'EdgeAlpha',0);
 
 
 
@@ -285,6 +319,7 @@ title('maximum columns')
 %then plot each column relative to that
 
 %generate the column centered figure
+allmaxesshift=[];
 allmaxes=[];
 figure; hold on;
 counter=0;
@@ -318,7 +353,8 @@ for k=1:numel(filelist)% for each fly
         [~,maxi]=max(flymax);
         %circshift flymax so the peak is at column 4 so all flies are
         %centered in the same way
-        flymax=circshift(flymax,4-maxi);
+        flymaxshift=circshift(flymax,4-maxi);
+        allmaxesshift(counter,:)=flymaxshift;
         allmaxes(counter,:)=flymax;
 
         
@@ -327,8 +363,12 @@ end
 
 %plot the matrix of adjacently responsive columns and overlay the sum of
 %the normalized resps
-figure; hold on; imagesc(allmaxes)
+figure; hold on; imagesc(allmaxesshift)
 colormap(gray)
+plot(cols-1,17*mean(allmaxesshift),'g','linewidth',2);
+
+figure; hold on; imagesc(allmaxes);
+colormap(gray);
 plot(cols-1,17*mean(allmaxes),'g','linewidth',2);
 
 
