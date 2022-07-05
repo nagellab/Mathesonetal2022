@@ -18,27 +18,20 @@ alltrialstimecourse_hdc(pwd,'vt062617_031120_f6e6',9);
 
 cd ..
 
-%% Generate all columns by direction Figure 5F/Generate all columns wind and odour timecourse Figure 5G/ Generate column centered analysis Figure 5H
+%% Generate all columns by direction Figure 5F/Generate all columns wind and odour timecourse Figure 5G/ Generate column centered analysis Figure 5H, generate max aligned columns in 5I
 
 cd Imagingdata
 
 processvt062617_paper
+maxalignedvt062617
 
 cd ..
 
-%% plot behavioural trajectories for splits in 5I
-trajectories_paper(actatlasloc,trajectoryloc,' ');
-
-%% plot timecourses and paired plots Figure 5I, S5C
-drivers={'19G02ADvt062617DB','vt024634ADvt062617DB','vt062617'};
-matchedtimecourses_paper(actatlasloc,drivers,'activation',' ');
-load('./CleanBehaviourdata/extractedparameters/hdeltac/hdeltac.mat');
-[siglinesup,siglinesdown,magnitudes,pvals]=plotparameters_FSB(actatlasloc,parameters,{'upwind','curvature'},{'cFSB'},' ','region');%includes vt062617 as well
-clear parameters
-%% plot calcium imaging example for supplement (Figure S5A)
+%% plot calcium imaging example for supplement (Figure S5B)
 %supplemental choose biggest column (col2) 
 cd Imagingdata
 alltrialstimecourse_hdc(pwd,'vt062617_021320_f1e1',3);
 ylim([0.9 1.25])
+column_histogram_hdc %fig s5c 
 cd ..
 end

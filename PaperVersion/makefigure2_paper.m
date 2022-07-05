@@ -46,29 +46,47 @@ clear parameters;
 %% make silencing plots Fig S2C
 
 load('./CleanBehaviourdata/extractedparameters/TNTparameters/TNTparameters.mat');
-[sigupTNT,sigdownTNT,magnitudeTNT]=plotparameters_TNT(tntatlasloc,parameters,{'upwind','curvature','curvatureoff'},{'LHMB'},' ','region')
+[sigupTNT,sigdownTNT,magnitudeTNT]=plotparameters_TNT(tntatlasloc,parameters,{'upwind','curvature','curvatureoff'},{'HO'},' ','region')
 
 
-
+clear parameters;
 %% Make imaging plots Fig 2E
 
 cd('./Imagingdata/');
 makeimagingplots_paper(pwd,'lh1396.mat',0,0,'');
 makeimagingplots_paper(pwd,'MB052B.mat',0,0,'');
-%change the window that is being used between these for plotting
-makeimagingplots_paper(pwd,'MB077B.mat',0,0,'');
-makeimagingplots_paper(pwd,'MB082C.mat',0,0,'');
+%collected with newer setup - use version of code for this setup
+makeimagingplots_papernewthor(pwd,'MB077B.mat',0,0,'');
+makeimagingplots_papernewthor(pwd,'MB082C.mat',0,0,'');
 
+cd ..
 
+%% Run classification Fig 2F
 
-%% Calculate directional indices Fig 2F
+cd('./classification');
+load('directionclassificationdata.mat');
 
- cd Imagingdata/
- 
- dirratioscript_paper
- 
- cd ..
-
+%make the direction classifier plot - shuffling is random each iteration of
+%run
+err=treeerror(tables);
+err=mergeerror(err);
+shufferrall=shufflederrorall(tables);
+shufferrall=mergeerror(shufferrall);
+plottreeerorvsshuff(err,shufferrall);
+clear all
+load('odourclassificationdata.mat')
+odourerr=treeodourerror(odourtables);
+odourerr=mergeerror(odourerr);
+shufferrodour=shufflederrorallodour(odourtables);
+shufferrodour=mergeerror(shufferrodour);
+pvalsodour=plotodourtreeerror(odourerr,shufferrodour);
+odourbaseerr=treeodourerror(odourbasetables);
+odourbaseerr=mergeerror(odourbaseerr);
+shufferrodourbase=shufflederrorallodour(odourbasetables);
+shufferrodourbase=mergeerror(shufferrodourbase);
+pvalsodourbase=plotodourtreeerror(odourbaseerr,shufferrodourbase);
+clear all
+cd ..
 
 %% Make anenometer plot Fig S2D 
 
@@ -78,6 +96,7 @@ ManifoldStimulusScript
 
 %look at single fly heatmaps for selected examples 
 %make lh1396 single example 
+cd('./Imagingdata/');
 load('lh1396.mat');
 alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'lh1396_012220_f1e2',0);
 
@@ -85,18 +104,19 @@ alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'lh1396_012220_f1e2',0);
 load('MB052B.mat');
 alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'MB052B_011520_f1e2',0);
 
-cd('..')
 
 %MB077B single example
-alltrialstimecourse_newthor(pwd,'MB077B_jul2021_f4e5',2,0,1,0);
+load('MB077B.mat')
+alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'MB077B_jul2021_f4e5',0);
 
 %MB082C single example
-alltrialstimecourse_newthor(pwd,'MB082C_jul0721_f1e3',2,0,1,0);
+load('MB082C.mat')
+alltrialstimecourse_paper(chosenfluor,chosenFrameRate,'MB082C_jul0721_f1e3',0);
+cd('..')
 
 
-
-%% Make Fig 2G) Ephys data
-
+%% Make Fig S2F) Ephys data
+cd('PatchClampdata/');
 load('ephysdataMBON.mat');
 MBONplotting(physdata,filtdata,0);
-
+cd ..

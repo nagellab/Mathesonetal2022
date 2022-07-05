@@ -9,9 +9,9 @@ cd('./Imagingdata/');
 
 makeimagingplots_paper(pwd,'21D07.mat',0,0,'');
 makeimagingplots_paper(pwd,'65C03.mat',0,0,'');
-makeimagingplots_paper(pwd,'12D12.mat',0,0,'');
+makeimagingplots_papernewthor(pwd,'12D12.mat',0,0,'');
 makeimagingplots_paper(pwd,'vFB.mat',0,0,'');
-
+cd ..
 
 %% Make Example trajectories Figure 4C left
 
@@ -34,10 +34,33 @@ load('./CleanBehaviourdata/extractedparameters/CXparameters/CXparameters.mat');
 [siglinesup,siglinesdown,magnitudes,pvals]=plotparameters_FSB(FSBatlaslocshort,parameters,{'upwind','curvatureoff'},{'12D12'},' ','driver');
 
 clear parameters
-%% directionality index 4D
- cd Imagingdata/
+%% classifiers for 4D and S4E/F
+cd('./classification');
+load('directionclassificationdata.mat');
+
+%make the direction classifier plot - shuffling is random each iteration of
+%run
+err=treeerror(tables);
+err=mergeerror(err);
+shufferrall=shufflederrorall(tables);
+shufferrall=mergeerror(shufferrall);
+plottreeerorvsshuff(err,shufferrall);
+clear all
+load('odourclassificationdata.mat')
+odourerr=treeodourerror(odourtables);
+odourerr=mergeerror(odourerr);
+shufferrodour=shufflederrorallodour(odourtables);
+shufferrodour=mergeerror(shufferrodour);
+pvalsodour=plotodourtreeerror(odourerr,shufferrodour);
+odourbaseerr=treeodourerror(odourbasetables);
+odourbaseerr=mergeerror(odourbaseerr);
+shufferrodourbase=shufflederrorallodour(odourbasetables);
+shufferrodourbase=mergeerror(shufferrodourbase);
+pvalsodourbase=plotodourtreeerror(odourbaseerr,shufferrodourbase);
+clear all
+cd ..
  
- dirratioscript_paper
+
 
 
 %% Decay plot 4E
@@ -59,17 +82,9 @@ matchedtimecourses(FSBatlaslocshort,drivers,'activation',' ');
 load('./CleanBehaviourdata/extractedparameters/TNTparameters/TNTparameters.mat');
 [sigupTNT,sigdownTNT,magnitudeTNT]=plotparameters_TNT(tntatlasloc,parameters,{'upwind','curvatureoff'},{'FSB'},' ','region')
 clear parameters sigupTNT sigdownTNT magnitudeTNT
-%Gtacr silencing
-%load gtacr data and make plots while returning p-values
 
-load('./CleanBehaviourdata/extractedparameters/GTACRparameters/lightonparameters.mat');
-load('./CleanBehaviourdata/extractedparameters/GTACRparameters/lightoffparameters.mat');
 
-pvals=plotgtacr(parameterslight,parametersodour);
 
-clear parameterslight parametersodour pvals
-%% imaging examples Figure S4D
 
-%will have to figure out what these are
 
 end

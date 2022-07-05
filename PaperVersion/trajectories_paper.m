@@ -12,9 +12,10 @@ atlas.anatomy=categorical(atlas.anatomy);
 %lines of interest
 
 %Use preselected trajectories 
-trajs=readtable(trajectorypath);
+trajs=readtable(trajectorypath,'Format','auto');
 
 trajs.Line=categorical(trajs.Line);
+
 
 %For the number of genotypes listed in the sheet
 for k=1:numel(trajs.Line)

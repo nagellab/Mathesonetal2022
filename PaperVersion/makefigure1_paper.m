@@ -4,7 +4,7 @@ function makefigure1_paper(savefigs)
 
 actatlasloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/refinedlines.xlsx';
 orcoacvatlasloc='./datalocs/orcoacv.xlsx';
-ctrlatlasloc='/Users/andrew/Documents/Nagel/Andrew Behaviour/basics.xlsx';
+ctrlatlasloc='./datalocs/Basics_paper.xlsx';
 basicsatlasloc='./datalocs/Basics_paper.xlsx';
 ORatlasloc='./datalocs/singleORs_paper.xlsx';
 tntatlasloc='./datalocs/TNTatlas.xlsx';
@@ -22,18 +22,19 @@ trajectories_paper('./datalocs/Basics_paper.xlsx','./datalocs/Figure1exampletraj
 
 %load the extracted data from the right locations. 
 
-%plot the matched timecourses (inside set the parameters - right now will
-%do all)
+%plot the matched for orco, acv and orcoir8a
 matchedtimecourses_paper(basicsatlasloc,{'orcoir8a'},'activation',' ');
 
-%do the same for ACV but only the matched timecourses - So not just the
-%paired parameters but the whole paired data - might need to manually save 
-%that will mess up the plotting though so will need to figure it out 
 
+load('./CleanBehaviourdata/basics/MatchedOrco_acv.mat');
+load('./CleanBehaviourdata/basics/MatchedOrco_chrimson.mat');
+plotcomparevels_pretty(orcochrim,{'pmove','upwindvelocity','groundspeed','angularvelocity','curvature','placepref'});
+plotcomparevels_pretty(orcoodour,{'pmove','upwindvelocity','groundspeed','angularvelocity','curvature','placepref'});
+clear orcoodour orcochrim
 
 %% 1E quantification ACV, orco, ir8a and controls 
 
-load('./CleanBehaviourdata/extractedparameters/ORparameters/OrcoACVParameters.mat');
+load('./CleanBehaviourdata/extractedparameters/ORparameters/OrcoACVmatchedParameters.mat');
 [siglinesup,siglinesdown,magnitudes,pvals]=plotparameters_FSB(basicsatlasloc,parameters,{'upwind','curvatureoff'},{'basic'},' ','region');
 
 clear parameters
@@ -51,7 +52,6 @@ load('./CleanBehaviourdata/extractedparameters/TNTparameters/TNTparameters.mat')
 clear parameters;
 
 %% S1A timecourse and paired data
-matchedtimecourses2conds_paper(orcoacvatlasloc,'orco5905acvChrimson',0);%make the baseline subtracted paired plots
 
 load('./CleanBehaviourdata/extractedparameters/ORparameters/OrcoACVmatchedParameters.mat');
 plotpaired_orcoactivation(parameters.upwind.dACV-parameters.upwindbase.dACV,parameters.upwind.dorco-parameters.upwindbase.dorco,1,'upwind velocity (mm/s)');
@@ -71,7 +71,7 @@ clear parameters;
 %% Make Supplemental Figure 1 
 
 %% Figure S1B - empty-gal4 and empty split activation
-comparematchedtimecourses(ctrlatlasloc,{'empty','emptysplit'},' ','activation');
+comparematchedtimecourses_paper(ctrlatlasloc,{'empty','emptysplit'},' ','activation');
 
 %% Figure S1C timecourse
 matchedtimecourses_paper(ORatlasloc,{'orcoir8a'},'windoff',' ');
